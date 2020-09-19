@@ -55,4 +55,12 @@ public interface IHbdmswapRestApi {
 	public String futureContractHisorders(String symbol, String tradeType, String type, String status,
 			String createDate, String pageIndex, String pageSize) throws HttpException, IOException;
 
+	public String futureContractTriggerOrder(String symbol, String trigger_type, String trigger_price, String order_price,
+			String volume, String order_op, String offset, String lever_rate) throws HttpException, IOException;
+	
+	public String futureCancelTriggerOrder(String symbol, String order_id) throws HttpException, IOException;
+	
+	public String futureGetTriggerOrders(String symbol, String page_index, String page_size) throws HttpException, IOException;
+	
+	public String futureGetHistoryTriggerOrders(String contract_code, String trade_type, String status, String create_date) throws HttpException, IOException;
 }

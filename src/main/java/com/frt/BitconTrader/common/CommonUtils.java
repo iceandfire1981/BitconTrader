@@ -1,6 +1,8 @@
 package com.frt.BitconTrader.common;
 
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -11,6 +13,7 @@ import javax.annotation.Nonnull;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.frt.BitconTrader.model.BarModel;
+import com.frt.BitconTrader.model.OrderModel;
 import com.frt.BitconTrader.model.TickerModel;
 
 public final class CommonUtils {
@@ -129,4 +132,34 @@ public final class CommonUtils {
 		return null;
 	}
 
+	public static void writeTradeLog(String order_record) {
+		File log_file = new File(SystemConfig.LOG_FILE_PATH);
+		if(!log_file.exists()) {
+			try {
+				log_file.createNewFile();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		FileWriter f_write = null;
+		try {
+			f_write = new FileWriter(log_file, true);
+			f_write.write(order_record);
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		} finally {
+			if(null != f_write) {
+				try {
+					f_write.close();
+				} catch (Exception e2) {
+					// TODO: handle exception
+					e2.printStackTrace();
+				}
+			}
+		}
+	}
+	
 }

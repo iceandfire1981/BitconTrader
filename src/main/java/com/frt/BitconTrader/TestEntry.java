@@ -8,6 +8,7 @@ import com.frt.BitconTrader.common.SystemConfig;
 import com.frt.BitconTrader.manager.ParamManager;
 import com.frt.BitconTrader.manager.PolicyManager;
 import com.frt.BitconTrader.model.BarModel;
+import com.frt.BitconTrader.model.OrderModel;
 import com.frt.BitconTrader.model.TickerModel;
 
 public class TestEntry {
@@ -52,19 +53,20 @@ public class TestEntry {
 	
 	public void startTest() {
 		try {
-			ArrayList<BarModel> all_bars = m_client.getSomeKLine(SystemConfig.PERIOD_1D, 2);
+			ArrayList<BarModel> all_bars = m_client.getSomeKLine(SystemConfig.PERIOD_1D, 1);
 			System.out.println("bar= " + all_bars.get(0));
 			TickerModel t_model = m_client.getTickerInfo();
 			System.out.println("ticker= " + t_model);
 			
 			String buy_client = String.valueOf(System.currentTimeMillis());
 			m_client.openOneOrder(String.valueOf(1.0), "1", SystemConfig.ORDER_OP_BUY, buy_client);
-			
-			String sell_client = String.valueOf(System.currentTimeMillis());
-			m_client.openOneOrder(String.valueOf(1.0), "1", SystemConfig.ORDER_OP_SELL, sell_client);
+			OrderModel o_model = m_client.getOrderInfo(buy_client);
+			System.out.println("order= " + o_model);
+			//String sell_client = String.valueOf(System.currentTimeMillis());
+			//m_client.openOneOrder(String.valueOf(1.0), "1", SystemConfig.ORDER_OP_SELL, sell_client);
 			
 			m_client.closeOneOrder(String.valueOf(1.0), "1", SystemConfig.ORDER_OP_SELL);//CLOSE BUY ORDER
-			m_client.closeOneOrder(String.valueOf(1.0), "1", SystemConfig.ORDER_OP_BUY);//CLOSE SELL ORDER
+			//m_client.closeOneOrder(String.valueOf(1.0), "1", SystemConfig.ORDER_OP_BUY);//CLOSE SELL ORDER
 			
 		} catch (Exception e) {
 			// TODO: handle exception

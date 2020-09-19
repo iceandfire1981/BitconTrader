@@ -14,7 +14,8 @@ public class PolicyManager {
 	public PolicyManager(ParamManager p_manager) {
 		m_p_manager = p_manager;
 		m_policy_map = new HashMap<String, String>();
-		m_policy_map.put("bitcon_diff_policy", "com.frt.BitconTrader.policy.BitconPolicy");
+		//m_policy_map.put("bitcon_diff_policy", "com.frt.BitconTrader.policy.BitconPolicy");
+		m_policy_map.put("bitcon_diff_policy_ex", "com.frt.BitconTrader.policy.BitconPolicyEx");
 	}
 	
 	public void startManager() {

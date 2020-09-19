@@ -1,5 +1,8 @@
 package com.frt.BitconTrader.policy;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import com.frt.BitconTrader.common.CommonUtils;
 import com.frt.BitconTrader.common.SystemConfig;
 import com.frt.BitconTrader.inf.AbsPolicy;
@@ -78,13 +81,13 @@ public class BitconPolicy extends AbsPolicy {
 		double current_diff_real = CommonUtils.formatDecimal(close - open);
 		
 		long order_action_dt = m_current_param.m_order_action_dt;
-		long current_dt = System.currentTimeMillis();
+		long current_dt = m_current_bars_list.get(0).m_dt;//System.currentTimeMillis();
 		boolean is_same_day = (order_action_dt <= 0) ? false : CommonUtils.isSameDay(order_action_dt, current_dt);
 		
 		System.out.println("BitconPolicy::actionPolicyOnce::id= " + m_param_id + 
 				" bid= " + bid + " ask= " + ask + " c_diff= " + current_diff + " c_diff_r= " + current_diff_real +
 				" high= " + high + " open = " + open + " low= " + low + " close= " + close + 
-				" o_dt= " + order_action_dt + " c_dt= " + current_dt  +  " is_same_day= " + is_same_day);
+				" o_dt= " + order_action_dt + " c_dt= " + current_dt  +  " is_same_day= " + is_same_day + " o_d_str= " + getDateString(order_action_dt) + " c_dt= " + getDateString(current_dt));
 		
 		if ("-1".equalsIgnoreCase(order_tick)) {//开仓处理
 			System.out.println("BitconPolicy::actionPolicyOnce::id= " + m_param_id + " info::Handle Open order=============");
@@ -143,6 +146,12 @@ public class BitconPolicy extends AbsPolicy {
 		}
 		
 		System.out.println("BitconPolicy::actionPolicyOnce::id= " + m_param_id + " Thread start end==================");
+	}
+	
+	private String getDateString(long input_ts) {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String result = sdf.format(new Date(input_ts));
+		return result;
 	}
 	
 }

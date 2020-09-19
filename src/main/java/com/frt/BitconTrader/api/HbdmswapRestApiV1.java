@@ -2,6 +2,7 @@ package com.frt.BitconTrader.api;
 
 import com.frt.BitconTrader.api.request.Order;
 import com.frt.BitconTrader.api.util.HbdmHttpClient;
+import com.frt.BitconTrader.common.SystemConfig;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -10,6 +11,7 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.HttpException;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 public class HbdmswapRestApiV1 implements IHbdmswapRestApi {
 	
@@ -33,6 +35,11 @@ public class HbdmswapRestApiV1 implements IHbdmswapRestApi {
 	public static final String HUOBI_FUTURE_ORDER_CANCEL_ALL = "/swap-api/v1/swap_cancelall";
 	public static final String HUOBI_CONTRACE_CODE = "/swap-api/v1/swap_open_interest";
 	public static final String HUOBI_CONTRACE_OPENORDERS = "/swap-api/v1/swap_openorders";
+	
+	public static final String HUOBI_CONTRACE_TRIGGER_ORDER = "/swap-api/v1/swap_trigger_order";
+	public static final String HUOBI_CONTRACE_CANCEL_TRIGGER_ORDER = "/swap-api/v1/swap_trigger_cancel";
+	public static final String HUOBI_GET_TRIGGER_ORDERS = "/swap-api/v1/swap_trigger_openorders";
+	public static final String HUOBI_GET_HISTORY_TRIGGER_ORDERS = "/swap-api/v1/swap_trigger_hisorders";
 
 	private String secret_key;
 	private String api_key;
@@ -334,6 +341,142 @@ public class HbdmswapRestApiV1 implements IHbdmswapRestApi {
 		}
 		String res = HbdmHttpClient.getInstance().call(api_key, secret_key, "POST",
 				url_prex + HUOBI_FUTURE_CONTRACT_HISORDERS, params, new HashMap<>());
+		return res;
+	}
+
+	@Override
+	public String futureContractTriggerOrder(String symbol, String trigger_type, String trigger_price,
+			String order_price, String volume, String direction, String offset, String lever_rate) throws HttpException, IOException {
+		// TODO Auto-generated method stub
+		Map<String, String> params = new HashMap<>();
+		if(!StringUtils.isEmpty(symbol)) {
+			params.put("contract_code", symbol);
+		} else {
+			params.put("contract_code", SystemConfig.SYMBOL);
+		}
+		
+		if(!StringUtils.isEmpty(trigger_type)) {
+			params.put("trigger_type", trigger_type);
+		} else {
+			params.put("trigger_type", SystemConfig.TRIGGER_TYPE_GE);
+		}
+		
+		if(!StringUtils.isEmpty(trigger_price)) {
+			params.put("trigger_price", trigger_price);
+		}
+		
+		if(!StringUtils.isEmpty(order_price)) {
+			params.put("order_price", order_price);
+		}
+		
+		if(!StringUtils.isEmpty(volume)) {
+			params.put("volume", volume);
+		} else {
+			params.put("volume", "1");
+		}
+		
+		if(!StringUtils.isEmpty(direction)) {
+			params.put("direction", direction);
+		} else {
+			params.put("direction", SystemConfig.ORDER_OP_BUY);
+		}
+		
+		if(!StringUtils.isEmpty(offset)) {
+			params.put("offset", offset);
+		} else {
+			params.put("offset", SystemConfig.OFFSET_TYPE_CLOSE);
+		}
+		
+		if(!StringUtils.isEmpty(lever_rate)) {
+			params.put("lever_rate", lever_rate);
+		} else {
+			params.put("lever_rate", "1");
+		}
+		
+		String res = HbdmHttpClient.getInstance().call(api_key, secret_key, "POST",
+				url_prex + HUOBI_CONTRACE_TRIGGER_ORDER, params, new HashMap<>());
+		
+		return res;
+	}
+
+	@Override
+	public String futureCancelTriggerOrder(String symbol, @NonNull String order_id) throws HttpException, IOException {
+		// TODO Auto-generated method stub
+		Map<String, String> params = new HashMap<>();
+		if(!StringUtils.isEmpty(symbol)) {
+			params.put("contract_code", symbol);
+		} else {
+			params.put("contract_code", SystemConfig.SYMBOL);
+		}
+		
+		if(!StringUtils.isEmpty(order_id)) {
+			params.put("order_id", order_id);
+		} else {
+			params.put("order_id", order_id);
+		}
+		
+		
+		String res = HbdmHttpClient.getInstance().call(api_key, secret_key, "POST",
+				url_prex + HUOBI_CONTRACE_CANCEL_TRIGGER_ORDER, params, new HashMap<>());
+		
+		return res;
+	}
+
+	@Override
+	public String futureGetTriggerOrders(String symbol, String page_index, String page_size)
+			throws HttpException, IOException {
+		// TODO Auto-generated method stub
+		Map<String, String> params = new HashMap<>();
+		if(!StringUtils.isEmpty(symbol)) {
+			params.put("contract_code", symbol);
+		} else {
+			params.put("contract_code", SystemConfig.SYMBOL);
+		}
+		
+		if(!StringUtils.isEmpty(page_index)) {
+			params.put("page_index", page_index);
+		} 
+		
+		if(!StringUtils.isEmpty(page_size)) {
+			params.put("page_size", page_size);
+		}
+		
+		String res = HbdmHttpClient.getInstance().call(api_key, secret_key, "POST",
+				url_prex + HUOBI_GET_TRIGGER_ORDERS, params, new HashMap<>());
+		return res;
+	}
+
+	@Override
+	public String futureGetHistoryTriggerOrders(String contract_code, String trade_type, String status,
+			String create_date) throws HttpException, IOException {
+		// TODO Auto-generated method stub
+		Map<String, String> params = new HashMap<>();
+		if(!StringUtils.isEmpty(contract_code)) {
+			params.put("contract_code", contract_code);
+		} else {
+			params.put("contract_code", SystemConfig.SYMBOL);
+		}
+		
+		if(!StringUtils.isEmpty(trade_type)) {
+			params.put("trade_type", trade_type);
+		} else {
+			params.put("trade_type", "0");
+		}
+		
+		if(!StringUtils.isEmpty(status)) {
+			params.put("status", status);
+		} else {
+			params.put("status", "0");
+		}
+		
+		if(!StringUtils.isEmpty(create_date)) {
+			params.put("create_date", create_date);
+		} else {
+			params.put("create_date", "1");
+		}
+		
+		String res = HbdmHttpClient.getInstance().call(api_key, secret_key, "POST",
+				url_prex + HUOBI_GET_HISTORY_TRIGGER_ORDERS, params, new HashMap<>());
 		return res;
 	}
 

@@ -10,8 +10,8 @@ public class App {
 		TraderEntry entry = new TraderEntry();
 		entry.startTrade();
 		
-//		TestEntry entry = new TestEntry();
-//		entry.startTest();
-		System.out.println("Trade app main end===========================");
+		//TestEntry entry = new TestEntry();
+		//entry.startTest();
+		//System.out.println("Trade app main end===========================");
 	}
 }
